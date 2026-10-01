@@ -7,3 +7,14 @@
   font-family: '华康金刚黑';
   src: url('./cn/华康金刚黑.ttf');
 }
+
+/* Private local scrapbook fonts; served only by this travel editor. */
+@font-face {
+  font-family: '旅行楷体';
+  src: url('/travel/fonts/travel-kai.ttf');
+}
+
+@font-face {
+  font-family: 'TravelHand';
+  src: url('/travel/fonts/travel-hand.ttf');
+}

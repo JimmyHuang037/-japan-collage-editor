@@ -18,7 +18,7 @@
             <Select v-model="baseAttr.fontFamily" @on-change="changeFontFamily">
               <Option v-for="item in fontsList" :value="item.name" :key="`font-${item.name}`">
                 <div class="font-item" :style="`background-image:url('${item.img}');`">
-                  {{ !item.img ? item : '' }}
+                  {{ !item.img ? item.name : '' }}
                   <!-- 解决无法选中问题 -->
                   <span style="display: none">{{ item.name }}</span>
                 </div>

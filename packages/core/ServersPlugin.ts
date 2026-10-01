@@ -187,6 +187,10 @@ class ServersPlugin implements IPluginTempl {
   getExtensionKey() {
     return [
       'id',
+      'photoId',
+      'originalName',
+      'sourceHash',
+      'name',
       'gradientAngle',
       'selectable',
       'hasControls',

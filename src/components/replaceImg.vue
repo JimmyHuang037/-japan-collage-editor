@@ -31,6 +31,12 @@ const repleace = async () => {
   if (activeObject && activeObject.type === 'image') {
     // 图片
     const [file] = await selectFiles({ accept: 'image/*', multiple: false });
+    if (!file) return;
+    const bytes = await file.arrayBuffer();
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    const hash = Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join(
+      ''
+    );
     // 转字符串
     const fileStr = await getImgStr(file);
     // 字符串转El
@@ -39,11 +45,21 @@ const repleace = async () => {
     const height = activeObject.get('height');
     const scaleX = activeObject.get('scaleX');
     const scaleY = activeObject.get('scaleY');
+    const center = activeObject.getCenterPoint();
     activeObject.setSrc(imgEl.src, () => {
-      activeObject.set('scaleX', (width * scaleX) / imgEl.width);
-      activeObject.set('scaleY', (height * scaleY) / imgEl.height);
+      const scale = Math.min((width * scaleX) / imgEl.width, (height * scaleY) / imgEl.height);
+      activeObject.set({
+        scaleX: scale,
+        scaleY: scale,
+        photoId: '',
+        originalName: file.name,
+        sourceHash: hash,
+      });
+      activeObject.setPositionByOrigin(center, 'center', 'center');
+      activeObject.setCoords();
       activeObject.set('originSrc', imgEl.src);
       canvasEditor.canvas.renderAll();
+      canvasEditor.saveState();
     });
     imgEl.remove();
   }

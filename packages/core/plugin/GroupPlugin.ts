@@ -28,12 +28,9 @@ class GroupPlugin implements IPluginTempl {
     const activeObject = this.canvas.getActiveObject() as fabric.Group;
     if (!activeObject) return;
     // 先获取当前选中的对象，然后打散
-    const activeObjectList = activeObject.getObjects();
     activeObject.toActiveSelection();
-    for (const item of activeObjectList) {
-      item.set('id', uuid());
-    }
     this.canvas.discardActiveObject().renderAll();
+    this.editor.saveState();
   }
 
   group() {
@@ -50,7 +47,9 @@ class GroupPlugin implements IPluginTempl {
       });
       this.canvas.add(newgroup);
       this.canvas.setActiveObject(newgroup);
-    });
+      this.canvas.renderAll();
+      this.editor.saveState();
+    }, this.editor.getExtensionKey());
   }
 
   contextMenu() {

@@ -75,7 +75,8 @@ import Editor, {
   MaskPlugin,
 } from '@kuaitu/core';
 
-const APIHOST = import.meta.env.APP_APIHOST;
+import { protectPhotos } from '@/travel/local';
+const APIHOST = '';
 
 // 创建编辑器
 const canvasEditor = new Editor() as IEditor;
@@ -137,6 +138,8 @@ onMounted(() => {
     .use(AddBaseTypePlugin)
     .use(MaskPlugin);
 
+  protectPhotos(canvasEditor);
+  if (import.meta.env.DEV) (window as any).__travelEditor = canvasEditor;
   state.show = true;
   // 默认打开标尺
   if (state.ruler) {

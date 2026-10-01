@@ -8,8 +8,6 @@
 
 // const repoSrc = 'http://localhost:1337';
 import { fabric } from 'fabric';
-import FontFaceObserver from 'fontfaceobserver';
-import axios from 'axios';
 import { downFile } from '../utils/utils';
 import type { IEditor, IPluginTempl } from '@kuaitu/core';
 
@@ -53,21 +51,15 @@ class FontPlugin implements IPluginTempl {
       return Promise.resolve(this.cacheList);
     }
     if (this.tempPromise) return this.tempPromise;
-    this.tempPromise = axios
-      .get(`${this.repoSrc}/api/fonts?populate=*&pagination[pageSize]=100`)
-      .then((res) => {
-        const list = res.data.data.map((item: any) => {
-          return {
-            name: item.attributes.name,
-            type: item.attributes.type,
-            file: this.repoSrc + item.attributes.file.data.attributes.url,
-            img: this.repoSrc + item.attributes.img.data.attributes.url,
-          };
-        });
-        this.cacheList = list;
-        this.createFontCSS(list);
-        return list;
-      });
+    this.cacheList = [
+      { name: '汉体', type: '中文', file: '', img: '' },
+      { name: '华康金刚黑', type: '中文', file: '', img: '' },
+      { name: '旅行楷体', type: '中文', file: '', img: '' },
+      { name: 'TravelHand', type: '英文', file: '', img: '' },
+      { name: 'arial', type: 'Latin', file: '', img: '' },
+      { name: 'Georgia', type: 'Latin', file: '', img: '' },
+    ];
+    this.tempPromise = Promise.resolve(this.cacheList);
     return this.tempPromise;
   }
 
@@ -86,10 +78,10 @@ class FontPlugin implements IPluginTempl {
       fontFamilies = skipFonts.includes(object.fontFamily) ? [] : [object.fontFamily];
     }
 
-    const fontFamiliesAll = fontFamilies.map((fontName) => {
-      const font = new FontFaceObserver(fontName);
-      return font.load(null, 150000);
-    });
+    // Local webfonts load explicitly; system font fallbacks need no observer.
+    const fontFamiliesAll = fontFamilies.map((fontName) =>
+      document.fonts.load(`16px "${fontName}"`)
+    );
     return Promise.all(fontFamiliesAll);
   }
 
@@ -108,8 +100,7 @@ class FontPlugin implements IPluginTempl {
   }
 
   loadFont(fontName: string) {
-    const font = new FontFaceObserver(fontName);
-    return font.load(null, 150000).then(() => {
+    return document.fonts.load(`16px "${fontName}"`).then(() => {
       const activeObject = this.canvas.getActiveObjects()[0];
       if (activeObject) {
         activeObject.set('fontFamily', fontName);

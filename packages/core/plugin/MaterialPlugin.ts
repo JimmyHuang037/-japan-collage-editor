@@ -151,19 +151,13 @@ class MaterialPlugin implements IPluginTempl {
   }
 
   getSizeList() {
-    return axios.get(`${this.repoSrc}/api/sizes?pagination[pageSize]=100`).then((res) => {
-      const list = res.data.data.map((item: any) => {
-        return {
-          value: item.id,
-          name: item.attributes.name,
-          width: Number(item.attributes.width),
-          height: Number(item.attributes.height),
-          unit: item.attributes.unit,
-        };
-      });
-      return list;
-    });
+    return Promise.resolve([
+      { value: 'square', name: '方形拼贴', width: 2400, height: 2400, unit: 'px' },
+      { value: 'landscape', name: '横向', width: 2400, height: 1800, unit: 'px' },
+      { value: 'portrait', name: '竖向', width: 1800, height: 2400, unit: 'px' },
+    ]);
   }
+
   getFontList() {
     return axios.get(`${this.repoSrc}/api/fonts?pagination[pageSize]=100`).then((res) => {
       const list = res.data.data.map((item: any) => {

@@ -1,0 +1,30 @@
+name: japan-collage
+services:
+  editor:
+    build:
+      context: .
+      dockerfile: dev/Dockerfile
+    image: japan-collage-dev:local
+    init: true
+    user: "1000:1000"
+    working_dir: /app
+    ports:
+      - "127.0.0.1:3077:3000"
+    volumes:
+      - .:/app
+    environment:
+      HOME: /tmp/travel-home
+      BROWSER: none
+    command: ["pnpm", "dev", "--host", "0.0.0.0"]
+  drive:
+    image: japan-collage-dev:local
+    profiles: [tools]
+    init: true
+    user: "1000:1000"
+    working_dir: /app
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - .:/app
+      - ${HOME}/.config/japan-collage:/credentials
+    entrypoint: ["python", "scripts/drive.py"]

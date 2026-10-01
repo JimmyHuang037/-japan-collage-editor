@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import align from '@/components/align.vue';
 import centerAlign from '@/components/centerAlign.vue';
-import flip from '@/components/flip.vue';
 
 import clone from '@/components/clone.vue';
 import hide from '@/components/hide.vue';
@@ -12,22 +11,18 @@ import dele from '@/components/del.vue';
 import bgBar from '@/components/bgBar.vue';
 import setSize from '@/components/setSize.vue';
 import replaceImg from '@/components/replaceImg.vue';
-import filters from '@/components/filters.vue';
-import imgStroke from '@/components/imgStroke.vue';
 // import elementData from '@/components/elementData.vue';
 // 右侧组件
 // import attribute from '@/components/attribute.vue';
 import attributePostion from '@/components/attributePostion.vue';
-import attributeId from '@/components/attributeId.vue';
+import attributeRounded from '@/components/attributeRounded.vue';
 import attributeShadow from '@/components/attributeShadow.vue';
 import attributeBorder from '@/components/attributeBorder.vue';
-import attributeRounded from '@/components/attributeRounded.vue';
 import attributeFont from '@/components/attributeFont.vue';
 import attributeTextFloat from '@/components/attributeTextFloat.vue';
 import attributeColor from '@/components/attributeColor.vue';
 import attributeBarcode from '@/components/attributeBarcode.vue';
 import attributeQrCode from '@/components/attributeQrCode.vue';
-import cropperImg from '@/components/cropperImg.vue';
 // hooks
 import useSelectListen from '@/hooks/useSelectListen';
 
@@ -85,19 +80,14 @@ const switchAttrBar = () => {
         <!-- 替换图片 -->
         <replaceImg></replaceImg>
         <!-- 裁剪 -->
-        <cropperImg></cropperImg>
         <!-- 图片裁切 -->
-        <clip-image></clip-image>
         <!-- 翻转 -->
-        <flip></flip>
         <!-- 条形码属性 -->
         <attributeBarcode></attributeBarcode>
         <!-- 二维码 -->
         <attributeQrCode></attributeQrCode>
         <!-- 图片滤镜 -->
-        <filters></filters>
         <!-- 图片描边 -->
-        <imgStroke />
         <!-- 颜色 -->
         <attributeColor></attributeColor>
         <!-- 字体属性 -->
@@ -109,16 +99,16 @@ const switchAttrBar = () => {
         <!-- 位置信息 -->
         <attributePostion></attributePostion>
         <!-- 阴影 -->
-        <attributeShadow></attributeShadow>
+        <template v-if="!['image', 'group'].includes(mixinState.mSelectOneType || '')">
+          <attributeShadow></attributeShadow>
+          <attributeBorder></attributeBorder>
+        </template>
         <!-- 边框 -->
-        <attributeBorder></attributeBorder>
         <!-- 圆角 -->
         <attributeRounded></attributeRounded>
         <!-- 关联数据 -->
-        <attributeId></attributeId>
 
         <!-- 新增字体样式使用 -->
-        <Button @click="canvasEditor.getFontJson()" size="small">获取元素数据</Button>
       </div>
     </div>
     <!-- <attribute v-if="state.show"></attribute> -->

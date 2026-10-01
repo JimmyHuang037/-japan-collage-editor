@@ -19,7 +19,6 @@
             {{ $t('importFiles.createDesign.title') }}
           </DropdownItem>
           <DropdownItem name="importFiles">{{ $t('importFiles.importFiles') }}</DropdownItem>
-          <DropdownItem name="psd">PSD</DropdownItem>
         </DropdownMenu>
       </template>
     </Dropdown>
@@ -35,28 +34,31 @@
 
 <script name="ImportJson" setup>
 import useSelect from '@/hooks/select';
-import useMaterial from '@/hooks/useMaterial';
+import { Utils } from '@kuaitu/core';
+import { openProject, projectState } from '@/travel/local';
 import { Message } from 'view-ui-plus';
 import modalSzie from '@/components/common/modalSzie';
-import { Spin } from 'view-ui-plus';
 
 const { canvasEditor } = useSelect();
-const { createTmpl, routerToId } = useMaterial();
 const modalSizeRef = ref(null);
 
 const clickHandler = (type) => {
   const handleMap = {
     // 导入文件
-    importFiles: canvasEditor.insert,
-    // 创建文件
-    createDesign,
-    // psd
-    psd: () => {
-      // Spin.show({
-      //   render: (h) => h('div', t('alert.loading_data')),
-      // });
-      canvasEditor.insertPSD().finally(Spin.hide);
+    importFiles: async () => {
+      const files = await Utils.selectFiles({ accept: '.json', multiple: false });
+      if (!files?.length) return;
+      try {
+        await openProject(
+          canvasEditor,
+          JSON.parse(await files[0].text()),
+          files[0].name.replace(/\.json$/, '')
+        );
+      } catch (error) {
+        Message.error(error.message || '工程导入失败');
+      }
     },
+    createDesign,
   };
   handleMap[type]?.();
 };
@@ -66,8 +68,10 @@ const createDesign = () => {
 };
 
 const customSizeCreate = async (w, h) => {
-  const res = await createTmpl(w, h);
-  routerToId(res.data.data.id);
+  canvasEditor.clear();
+  canvasEditor.setSize(w, h);
+  canvasEditor.clearAndSaveState();
+  projectState.name = '新旅行作品';
   Message.success('创建成功');
 };
 </script>

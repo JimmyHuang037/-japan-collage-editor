@@ -27,3 +27,18 @@ yarn.lock
 package-lock.json
 typings/auto-imports.d.ts
 .eslintrc-auto-import.json
+
+# Private travel assets and local outputs
+data/
+outputs/
+public/travel/
+playwright-report/
+test-results/
+.travel-cache/
+.pnpm-store/
+
+# Local Python caches and credentials
+__pycache__/
+*.py[cod]
+.env
+credentials/

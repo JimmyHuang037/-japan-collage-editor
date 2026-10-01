@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 // 左侧组件
-import importTmpl from '@/components/importTmpl.vue';
-import fontStyle from '@/components/fontStyle.vue';
-import myMaterial from '@/components/myMaterial/index.vue';
+import importTmpl from '@/components/travelProjects.vue';
+import myMaterial from '@/components/travelPhotos.vue';
 import tools from '@/components/tools.vue';
-import material from '@/components/material.vue';
 import layer from '@/components/layer.vue';
 import { useI18n } from 'vue-i18n';
 // 路由
@@ -21,8 +19,6 @@ const menuActive = ref('importTmpl');
 const leftBarComponent = {
   importTmpl,
   tools,
-  material,
-  fontStyle,
   layer,
   myMaterial,
 };
@@ -33,7 +29,7 @@ const leftBar = reactive([
   {
     //模板
     key: 'importTmpl',
-    name: computed(() => t('templates')),
+    name: '九图',
     icon: 'md-book',
   },
   {
@@ -41,18 +37,6 @@ const leftBar = reactive([
     key: 'tools',
     name: computed(() => t('elements')),
     icon: 'md-images',
-  },
-  {
-    //字体样式
-    key: 'fontStyle',
-    name: computed(() => t('font_style')),
-    icon: 'ios-pulse',
-  },
-  {
-    // 图片元素
-    key: 'material',
-    name: computed(() => t('material.cartoon')),
-    icon: 'ios-leaf-outline',
   },
   {
     // 图层
@@ -63,7 +47,7 @@ const leftBar = reactive([
   {
     // 用户素材
     key: 'myMaterial',
-    name: computed(() => t('mine')),
+    name: '照片',
     icon: 'ios-contact-outline',
   },
 ]);
