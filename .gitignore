@@ -42,3 +42,6 @@ __pycache__/
 *.py[cod]
 .env
 credentials/
+
+# Project-local downloaded design skills (sources live in .travel-cache)
+.agents/skills/
